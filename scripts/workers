@@ -1,0 +1,44 @@
+#!/bin/bash
+function start {
+	echo "Starting the worker processes..."
+	PIDFILE=./tmp/pids/resque0.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	
+	PIDFILE=./tmp/pids/resque1.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	
+	PIDFILE=./tmp/pids/resque2.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	echo "Done"
+}
+
+function stop {
+	echo "Stopping the rescue processes..."
+
+	if [ -f ./tmp/pids/resque0.pid ]; then
+		kill -9 `cat ./tmp/pids/resque0.pid`
+		rm ./tmp/pids/resque0.pid
+	fi
+	
+	if [ -f ./tmp/pids/resque1.pid ]; then
+		kill -9 `cat ./tmp/pids/resque1.pid`
+		rm ./tmp/pids/resque1.pid
+	fi
+	
+	if [ -f ./tmp/pids/resque2.pid ]; then
+		kill -9 `cat ./tmp/pids/resque2.pid`
+		rm ./tmp/pids/resque2.pid
+	fi
+
+	echo "Done"
+}
+
+if [ $1 == 'start' ]; then
+	start
+fi
+
+if [ $1 == 'stop' ]; then
+	stop
+fi
+
+if [ $1 == 'restart' ]; then
+	stop
+	start
+fi

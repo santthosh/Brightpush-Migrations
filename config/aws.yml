@@ -1,0 +1,13 @@
+# Fill in your AWS Access Key ID and Secret Access Key
+# http://aws.amazon.com/security-credentials
+development:
+    access_key_id: AKIAIOJ33KAWISJPCVLQ
+    secret_access_key: N9vSN/iNN7BCJxyHyCbd/yuprUrVP1RctTz+qMxC
+
+test:
+    access_key_id: AKIAIOJ33KAWISJPCVLQ
+    secret_access_key: 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
+    
+production:
+    access_key_id: AKIAIFB3ITFSD3FU7OYQ
+    secret_access_key: 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
