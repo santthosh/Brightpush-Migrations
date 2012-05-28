@@ -18,6 +18,7 @@ GEM
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
+    rake (0.9.2.2)
     redis (2.2.2)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
@@ -50,5 +51,6 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk
+  rake
   resque
   resque-status

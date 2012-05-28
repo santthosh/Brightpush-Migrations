@@ -1,10 +1,8 @@
-require 'resque-status'
 import 'simpledb.rb'
 import 'ua_api.rb'
 
 # Migrates the apids from Urban Airship to newsstand for Android applications
 module UA_Android_Migration 
-    include Resque::Plugins::Status
   @queue = :migrations
   
   # Process apids list

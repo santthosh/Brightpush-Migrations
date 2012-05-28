@@ -1,13 +1,13 @@
 # Fill in your AWS Access Key ID and Secret Access Key
 # http://aws.amazon.com/security-credentials
 development:
-    access_key_id: AKIAIOJ33KAWISJPCVLQ
-    secret_access_key: N9vSN/iNN7BCJxyHyCbd/yuprUrVP1RctTz+qMxC
+    access_key_id: AKIAIERRYQXDX7KCTHPQ
+    secret_access_key: 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
 
 test:
-    access_key_id: AKIAIOJ33KAWISJPCVLQ
-    secret_access_key: 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
+    access_key_id: AKIAIERRYQXDX7KCTHPQ
+    secret_access_key: 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
     
 production:
-    access_key_id: AKIAIFB3ITFSD3FU7OYQ
-    secret_access_key: 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
+    access_key_id: AKIAIERRYQXDX7KCTHPQ
+    secret_access_key: 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

@@ -1,30 +1,33 @@
 #!/bin/bash
 function start {
+	mkdir -p ./tmp
+	mkdir -p ./tmp/pids
+	
 	echo "Starting the worker processes..."
-	PIDFILE=./tmp/pids/resque0.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	PIDFILE=./tmp/pids/migrations0.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
 	
-	PIDFILE=./tmp/pids/resque1.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	PIDFILE=./tmp/pids/migrations1.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
 	
-	PIDFILE=./tmp/pids/resque2.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	PIDFILE=./tmp/pids/migrations2.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
 	echo "Done"
 }
 
 function stop {
 	echo "Stopping the rescue processes..."
 
-	if [ -f ./tmp/pids/resque0.pid ]; then
-		kill -9 `cat ./tmp/pids/resque0.pid`
-		rm ./tmp/pids/resque0.pid
+	if [ -f ./tmp/pids/migrations0.pid ]; then
+		kill -9 `cat ./tmp/pids/migrations0.pid`
+		rm ./tmp/pids/migrations0.pid
 	fi
 	
-	if [ -f ./tmp/pids/resque1.pid ]; then
-		kill -9 `cat ./tmp/pids/resque1.pid`
-		rm ./tmp/pids/resque1.pid
+	if [ -f ./tmp/pids/migrations1.pid ]; then
+		kill -9 `cat ./tmp/pids/migrations1.pid`
+		rm ./tmp/pids/migrations1.pid
 	fi
 	
-	if [ -f ./tmp/pids/resque2.pid ]; then
-		kill -9 `cat ./tmp/pids/resque2.pid`
-		rm ./tmp/pids/resque2.pid
+	if [ -f ./tmp/pids/migrations2.pid ]; then
+		kill -9 `cat ./tmp/pids/migrations2.pid`
+		rm ./tmp/pids/migrations2.pid
 	fi
 
 	echo "Done"

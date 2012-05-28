@@ -1,10 +1,8 @@
-require 'resque-status'
 import 'simpledb.rb'
 import 'ua_api.rb'
 
 # Migrates the device_tokens from Urban Airship to newsstand for iOS applications
 module UA_iOS_Migration 
-    include Resque::Plugins::Status
   @queue = :migrations
   
   # Process device token list
