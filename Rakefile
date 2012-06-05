@@ -6,6 +6,8 @@ import 'lib/ua_android_migration.rb'
 import 'lib/ua_api.rb'
 import 'lib/ua_ios_migration.rb'
 
+task :default => :help
+
 namespace :resque do
   task :setup do
     require 'resque'
