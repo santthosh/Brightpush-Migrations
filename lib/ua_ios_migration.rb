@@ -1,5 +1,5 @@
-import 'simpledb.rb'
-import 'ua_api.rb'
+import 'lib/simpledb.rb'
+import 'lib/ua_api.rb'
 
 # Migrates the device_tokens from Urban Airship to newsstand for iOS applications
 module UA_iOS_Migration 

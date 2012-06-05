@@ -1,5 +1,5 @@
-import 'simpledb.rb'
-import 'ua_api.rb'
+import 'lib/simpledb.rb'
+import 'lib/ua_api.rb'
 
 # Migrates the apids from Urban Airship to newsstand for Android applications
 module UA_Android_Migration 

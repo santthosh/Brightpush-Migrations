@@ -1,15 +1,14 @@
 require 'resque/tasks'
-require 'resque-status'
+require 'rspec/core/rake_task'
 require 'sinatra'
-import 'simpledb.rb'
-import 'ua_android_migration.rb'
-import 'ua_api.rb'
-import 'ua_ios_migration.rb'
+import 'lib/simpledb.rb'
+import 'lib/ua_android_migration.rb'
+import 'lib/ua_api.rb'
+import 'lib/ua_ios_migration.rb'
 
 namespace :resque do
   task :setup do
     require 'resque'
-    require 'resque-status'
     
     Resque::Plugins::Status::Hash.expire_in = (24 * 60 * 60) # 24hrs in seconds
     
@@ -28,4 +27,24 @@ namespace :resque do
     # Setup the shared redis server
     Resque.redis = $redis
   end
+end
+
+desc "Run specs"
+task :spec do
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.pattern = './spec/**/*_spec.rb'
+  end
+end
+
+desc "Run IRB console with app environment"
+task :console do
+  puts "Loading development console..."
+  system("irb -r ./config/boot.rb")
+end
+
+desc "Show help menu"
+task :help do
+  puts "Available rake tasks: "
+  puts "rake console - Run a IRB console with all enviroment loaded"
+  puts "rake spec - Run specs and calculate coverage"
 end
