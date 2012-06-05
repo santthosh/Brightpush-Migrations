@@ -10,8 +10,6 @@ namespace :resque do
   task :setup do
     require 'resque'
     
-    Resque::Plugins::Status::Hash.expire_in = (24 * 60 * 60) # 24hrs in seconds
-    
     rails_env = ENV['RAILS_ENV'] || 'development'
 
     if rails_env == 'production'
