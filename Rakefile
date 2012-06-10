@@ -1,5 +1,4 @@
 require 'resque/tasks'
-require 'rspec/core/rake_task'
 require 'sinatra'
 import 'lib/simpledb.rb'
 import 'lib/ua_android_migration.rb'
@@ -12,14 +11,14 @@ namespace :resque do
   task :setup do
     require 'resque'
     
-    rails_env = ENV['RAILS_ENV'] || 'development'
+    rack_env = ENV['RACK_ENV'] || 'development'
 
-    if rails_env == 'production'
+    if rack_env == 'production'
       $redis = Redis.new(:host => 'redis.brightpush.in')
-    elsif rails_env == 'staging'
+    elsif rack_env == 'staging'
       $redis = Redis.new(:host => 'redis.brightpushbeta.in')
-    elsuf rails_env == 'test'
-      $redis = Redis.new(:host => 'redis.brightpushalpha.in')
+    elsuf rack_env == 'development'
+      $redis = Redis.new(:host => 'redis.brightpushalpha.in:6379')
     else 
       $redis = 'localhost:6379'
     end
@@ -31,6 +30,8 @@ end
 
 desc "Run specs"
 task :spec do
+  require 'rspec/core/rake_task'
+  
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = './spec/**/*_spec.rb'
   end
