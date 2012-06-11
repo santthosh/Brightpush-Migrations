@@ -35,12 +35,12 @@ set :rack_env,"development"
  
  before 'deploy', 'rvm:install_ruby'
  
- after 'deploy:update_code', 'deploy:start_dashboard'
+ after 'deploy:update_code', 'deploy:start_workers'
  namespace :deploy do
-  desc "Starts the dashboard and the scheduler"
-  task :start_dashboard, :roles => :app do
+  desc "Starts the workers"
+  task :start_workers, :roles => :app do
     run "cd #{release_path} && bundle install"
-    run "cd #{release_path} && scripts/workers restart"
+    run "cd #{release_path} && scripts/workers restart #{:rack_env}"
   end
  end
  

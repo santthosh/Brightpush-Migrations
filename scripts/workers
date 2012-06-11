@@ -4,11 +4,11 @@ function start {
 	mkdir -p ./tmp/pids
 	
 	echo "Starting the worker processes..."
-	PIDFILE=./tmp/pids/migrations0.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations0.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
 	
-	PIDFILE=./tmp/pids/migrations1.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations1.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
 	
-	PIDFILE=./tmp/pids/migrations2.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
+	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations2.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work
 	echo "Done"
 }
 
@@ -34,14 +34,29 @@ function stop {
 }
 
 if [ $1 == 'start' ]; then
+	ENVIRONMENT="local"
+	if [ -n "$2" ]; then
+		ENVIRONMENT=$2
+	fi
+		
 	start
 fi
 
 if [ $1 == 'stop' ]; then
+	ENVIRONMENT="local"
+	if [ -n "$2" ]; then
+		ENVIRONMENT=$2
+	fi
+	
 	stop
 fi
 
 if [ $1 == 'restart' ]; then
+	ENVIRONMENT="local"
+	if [ -n "$2" ]; then
+		ENVIRONMENT=$2
+	fi
+	
 	stop
 	start
 fi

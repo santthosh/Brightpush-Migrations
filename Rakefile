@@ -17,11 +17,13 @@ namespace :resque do
       $redis = 'redis.brightpush.in:6379'
     elsif rack_env == 'staging'
       $redis = 'redis.brightpushbeta.in:6379'
-    elsuf rack_env == 'development'
+    elsif rack_env == 'development'
       $redis = 'redis.brightpushalpha.in:6379'
     else 
       $redis = 'localhost:6379'
     end
+    
+    puts rack_env $redis
     
     # Setup the shared redis server
     Resque.redis = $redis
