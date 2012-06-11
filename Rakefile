@@ -23,7 +23,7 @@ namespace :resque do
       $redis = 'localhost:6379'
     end
     
-    puts rack_env $redis
+    puts $redis
     
     # Setup the shared redis server
     Resque.redis = $redis

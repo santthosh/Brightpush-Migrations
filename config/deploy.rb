@@ -40,7 +40,7 @@ set :rack_env,"development"
   desc "Starts the workers"
   task :start_workers, :roles => :app do
     run "cd #{release_path} && bundle install"
-    run "cd #{release_path} && scripts/workers restart #{:rack_env}"
+    run "cd #{release_path} && scripts/workers restart #{rack_env}"
   end
  end
  
