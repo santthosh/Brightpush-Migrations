@@ -11,14 +11,14 @@ namespace :resque do
   task :setup do
     require 'resque'
     
-    rack_env = ENV['RACK_ENV'] || 'development'
+    rack_env = ENV['RACK_ENV'] || 'local'
 
     if rack_env == 'production'
-      $redis = Redis.new(:host => 'redis.brightpush.in')
+      $redis = 'redis.brightpush.in:6379'
     elsif rack_env == 'staging'
-      $redis = Redis.new(:host => 'redis.brightpushbeta.in')
+      $redis = 'redis.brightpushbeta.in:6379'
     elsuf rack_env == 'development'
-      $redis = Redis.new(:host => 'redis.brightpushalpha.in:6379')
+      $redis = 'redis.brightpushalpha.in:6379'
     else 
       $redis = 'localhost:6379'
     end

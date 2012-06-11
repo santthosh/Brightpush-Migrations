@@ -16,7 +16,7 @@ set :application, "brightpush-migrations"
 set :deploy_to, "/var/www/brightpush-migrations"
 set :repository,  "git@bright.unfuddle.com:bright/brightpush-migrations.git"
 set :user, "ubuntu"
-set :rails_env,"development"
+set :rack_env,"development"
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
