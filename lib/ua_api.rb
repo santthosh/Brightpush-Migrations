@@ -2,6 +2,12 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+module JSON
+  def self.parse_nil(json)
+    JSON.parse(json) if json && json.length >= 2
+  end
+end
+
 # Helper class to facilitate migration from Urban Airship
 module UA_API
   
@@ -25,6 +31,6 @@ module UA_API
     request.basic_auth(key, master_secret)
     response = http.request(request)
     
-    return JSON.parse(response.body)
+    return response.body && response.body.length >= 2 ? JSON.parse(response.body) : nil
   end
 end
