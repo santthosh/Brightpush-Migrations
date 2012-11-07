@@ -36,6 +36,8 @@ module UA_iOS_Migration
     
     # Get the domain, if its not found create one
     domain = SimpleDB.get_domain(identifier)
+    device_tokens_count = 0
+    active_device_tokens_count = 0
   
     unless domain.nil?
       url = UA_API.url_for_ios_device_token_list
@@ -49,9 +51,11 @@ module UA_iOS_Migration
         else
           url = response["next_page"]
           UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
+          device_tokens_count = response["device_tokens_count"]
+          active_device_tokens_count = response["active_device_tokens_count"]
         end
       end
-      puts  "finished migrations. total:#{response["device_tokens_count"]} active:#{response["active_device_tokens_count"]}"
+      puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count}"
     end
   end
   
