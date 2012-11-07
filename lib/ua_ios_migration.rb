@@ -32,6 +32,8 @@ module UA_iOS_Migration
       raise 'Invalid identifier, key or master_secret'
     end 
     
+    puts("Starting migrations job for #{identifier}");
+    
     # Get the domain, if its not found create one
     domain = SimpleDB.get_domain(identifier)
   
@@ -46,8 +48,8 @@ module UA_iOS_Migration
           url = nil
         else
           url = response["next_page"]
+          UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
         end
-        UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
       end
       puts  "finished migrations. total:#{response["device_tokens_count"]} active:#{response["active_device_tokens_count"]}"
     end
