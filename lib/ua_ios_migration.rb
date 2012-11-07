@@ -42,9 +42,12 @@ module UA_iOS_Migration
       until url.nil? do
         puts "#{url}"
         response = UA_API.get_next_page(url,key,master_secret)
-        url = response["next_page"]
-        
-        UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"])
+        if response.nil?
+          url = nil
+        else
+          url = response["next_page"]
+        end
+        UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
       end
       puts  "finished migrations. total:#{response["device_tokens_count"]} active:#{response["active_device_tokens_count"]}"
     end
