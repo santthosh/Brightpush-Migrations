@@ -9,6 +9,10 @@ module UA_API
     return "https://go.urbanairship.com/api/device_tokens/?limit=1000000";
   end
   
+  def self.url_for_ios_device_token_list_starting_from(start_token)
+    return "https://go.urbanairship.com/api/device_tokens/?start=#{start_token}&limit=1000000"
+  end 
+  
   def self.url_for_android_device_token_list
     return "https://go.urbanairship.com/api/apids/?limit=1000000";
   end

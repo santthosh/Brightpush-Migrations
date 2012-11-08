@@ -5,10 +5,14 @@ import 'lib/ua_api.rb'
 module UA_iOS_Migration 
   @queue = :migrations
   
+  last_device_token = nil;
+  migrated_device_count = 0;
+  
   # Process device token list
   def self.process_device_tokens(domain,device_tokens)
     device_tokens.each do |device_token|
      	item_name = device_token["device_token"]
+     	last_device_token = item_name;
      	
      	# If token doesn't exist add it
      	unless domain.items[item_name].nil?
@@ -21,6 +25,8 @@ module UA_iOS_Migration
      	    item.attributes.replace(:active => 0, :if => { :active => 1 })
      	  end
      	end
+     	
+     	migrated_device_count++
      	
      	print "."
     end
@@ -40,22 +46,27 @@ module UA_iOS_Migration
     active_device_tokens_count = 0
   
     unless domain.nil?
-      url = UA_API.url_for_ios_device_token_list
+      unless last_device_token.nil?
+        url = UA_API.url_for_ios_device_token_list
+      else 
+        url = UA_API.url_for_ios_device_token_list_starting_from(last_device_token)
+      end      
       
       # Get UA device_token list and process them one page at a time
-      until url.nil? do
+      until device_tokens_count > 0 && device_tokens_count == migrated_device_count do
         puts "#{url}"
         response = UA_API.get_next_page(url,key,master_secret)
         if response.nil?
-          url = nil
+          puts "ERROR: Expected a valid response, but none was returned"
+          break;
         else
-          url = response["next_page"]
           UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
+          url = UA_API.url_for_ios_device_token_list_starting_from(last_device_token)
           device_tokens_count = response["device_tokens_count"]
           active_device_tokens_count = response["active_device_tokens_count"]
         end
       end
-      puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count}"
+      puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#{migrated_device_count}"
     end
   end
   
