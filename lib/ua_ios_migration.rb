@@ -51,7 +51,7 @@ module UA_iOS_Migration
       retry_count = 0
       
       # Get UA device_token list and process them one page at a time
-      until device_tokens_count > 0 && device_tokens_count == $migrated_device_count do
+      until device_tokens_count > 0 && device_tokens_count  >= migrated_device_count do
         puts "#{url}"
         response = UA_API.get_next_page(url,key,master_secret)
         if response.nil?
@@ -61,14 +61,18 @@ module UA_iOS_Migration
             next
           else
             puts "ERROR: 10 attempts failed, giving up.."
-            break;
+            break
           end
         else
           retry_count = 0
-          UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
-          url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)
-          device_tokens_count = response["device_tokens_count"]
-          active_device_tokens_count = response["active_device_tokens_count"]
+          if response["device_tokens"].any?
+            UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
+            url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)
+            device_tokens_count = response["device_tokens_count"]
+            active_device_tokens_count = response["active_device_tokens_count"]
+          else 
+            break
+          end
         end
       end
       puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#{$migrated_device_count}"
