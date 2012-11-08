@@ -46,16 +46,25 @@ module UA_iOS_Migration
     active_device_tokens_count = 0
   
     unless domain.nil?
-      url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)   
+      url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token) 
+      
+      retry_count = 0
       
       # Get UA device_token list and process them one page at a time
       until device_tokens_count > 0 && device_tokens_count == $migrated_device_count do
         puts "#{url}"
         response = UA_API.get_next_page(url,key,master_secret)
         if response.nil?
-          puts "ERROR: Expected a valid response, but none was returned"
-          break;
+          unless retry_count > 10
+            puts "ERROR: Expected a valid response, but none was returned, retrying.."
+            retry_count = retry_count + 1
+            next
+          else
+            puts "ERROR: 10 attempts failed, giving up.."
+            break;
+          end
         else
+          retry_count = 0
           UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
           url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)
           device_tokens_count = response["device_tokens_count"]
