@@ -46,11 +46,7 @@ module UA_iOS_Migration
     active_device_tokens_count = 0
   
     unless domain.nil?
-      unless $last_device_token.nil?
-        url = UA_API.url_for_ios_device_token_list
-      else 
-        url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)
-      end      
+      url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)   
       
       # Get UA device_token list and process them one page at a time
       until device_tokens_count > 0 && device_tokens_count == $migrated_device_count do

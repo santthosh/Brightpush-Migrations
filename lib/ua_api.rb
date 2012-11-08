@@ -10,7 +10,11 @@ module UA_API
   end
   
   def self.url_for_ios_device_token_list_starting_from(start_token)
-    return "https://go.urbanairship.com/api/device_tokens/?start=#{start_token}&limit=1000000"
+    unless start_token.nil?
+      return self.url_for_ios_device_token_list
+    else
+      return "https://go.urbanairship.com/api/device_tokens/?start=#{start_token}&limit=1000000"
+    end
   end 
   
   def self.url_for_android_device_token_list
