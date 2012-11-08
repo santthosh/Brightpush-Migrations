@@ -26,7 +26,7 @@ module UA_iOS_Migration
      	  end
      	end
      	
-     	migrated_device_count++
+     	migrated_device_count = migrated_device_count + 1
      	
      	print "."
     end
