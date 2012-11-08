@@ -75,7 +75,8 @@ module UA_iOS_Migration
           end
         end
       end
-      puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#$migrated_device_count"
+      migrated_count = $migrated_device_count
+      puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#{migrated_count}"
     end
   end
   
