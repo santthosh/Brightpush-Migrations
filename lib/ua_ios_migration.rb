@@ -51,7 +51,7 @@ module UA_iOS_Migration
       retry_count = 0
       
       # Get UA device_token list and process them one page at a time
-      until device_tokens_count > 0 && device_tokens_count  >= $migrated_device_count do
+      until device_tokens_count > 0 && $migrated_device_count >= device_tokens_count  do
         puts "#{url}"
         response = UA_API.get_next_page(url,key,master_secret)
         if response.nil?
