@@ -2,6 +2,16 @@ import 'lib/simpledb.rb'
 import 'lib/ua_api.rb'
 require 'resque-status'
 
+module Resque
+  class JobWithStatus
+    # Wrapper API to forward a Resque::Job creation API call into
+    # a JobWithStatus call.
+    def self.scheduled(queue, klass, *args)
+      create(*args)
+    end
+  end
+end
+
 # Migrates the device_tokens from Urban Airship to newsstand for iOS applications
 class UA_iOS_Migration 
       include Resque::Plugins::Status
