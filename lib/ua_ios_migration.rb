@@ -1,8 +1,10 @@
 import 'lib/simpledb.rb'
 import 'lib/ua_api.rb'
+require 'resque-status'
 
 # Migrates the device_tokens from Urban Airship to newsstand for iOS applications
-module UA_iOS_Migration 
+class UA_iOS_Migration 
+      include Resque::Plugins::Status
   @queue = :migrations
   
   $last_device_token = nil;
@@ -33,10 +35,12 @@ module UA_iOS_Migration
   end
 
   # Execute the job
-  def self.perform(identifier,key,master_secret)
+  def perform(identifier,key,master_secret)
     if identifier.nil? || key.nil? || master_secret.nil?
       raise 'Invalid identifier, key or master_secret'
     end 
+    
+    tick()
     
     puts("Starting migrations job for #{identifier}");
     
@@ -52,30 +56,35 @@ module UA_iOS_Migration
       
       # Get UA device_token list and process them one page at a time
       until device_tokens_count > 0 && $migrated_device_count >= device_tokens_count  do
+        tick()
         puts "#{url}"
         response = UA_API.get_next_page(url,key,master_secret)
         if response.nil?
           unless retry_count > 10
             puts "ERROR: Expected a valid response, but none was returned, retrying.."
             retry_count = retry_count + 1
+            tick()
             next
           else
             puts "ERROR: 10 attempts failed, giving up.."
+            tick()
             break
           end
         else
           retry_count = 0
           if response["device_tokens"].any?
-            UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
-            url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)
             device_tokens_count = response["device_tokens_count"]
             active_device_tokens_count = response["active_device_tokens_count"]
+            at($migrated_device_count,device_tokens_count,"Processing: #{url}")
+            UA_iOS_Migration.process_device_tokens(domain,response["device_tokens"]) 
+            url = UA_API.url_for_ios_device_token_list_starting_from($last_device_token)
           else 
             break
           end
         end
       end
       migrated_count = $migrated_device_count
+      at($migrated_device_count,device_tokens_count,"Finished")
       puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#{migrated_count}"
     end
   end
