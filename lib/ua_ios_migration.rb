@@ -2,16 +2,6 @@ import 'lib/simpledb.rb'
 import 'lib/ua_api.rb'
 require 'resque-status'
 
-module Resque
-  class JobWithStatus
-    # Wrapper API to forward a Resque::Job creation API call into
-    # a JobWithStatus call.
-    def self.scheduled(queue, klass, *args)
-      create(*args)
-    end
-  end
-end
-
 # Migrates the device_tokens from Urban Airship to newsstand for iOS applications
 class UA_iOS_Migration 
       include Resque::Plugins::Status
@@ -45,7 +35,12 @@ class UA_iOS_Migration
   end
 
   # Execute the job
-  def perform(identifier,key,master_secret)
+  def perform(args)
+    arguments = args.split(",")
+    identifier = arguments.first
+    key = arguments.at(1)
+    master_secret = arguments.last
+    
     if identifier.nil? || key.nil? || master_secret.nil?
       raise 'Invalid identifier, key or master_secret'
     end 
