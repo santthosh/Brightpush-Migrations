@@ -35,7 +35,7 @@ class UA_iOS_Migration
   end
   
   def name
-    return "UA iOS Migraton"
+    return "UA iOS Migration: #{options.split(",").first}"
   end
 
   # Execute the job
