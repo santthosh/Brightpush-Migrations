@@ -36,7 +36,7 @@ class UA_iOS_Migration
 
   # Execute the job
   def perform
-    arguments = args.split(",")
+    arguments = options.split(",")
     identifier = arguments.first
     key = arguments.at(1)
     master_secret = arguments.last
