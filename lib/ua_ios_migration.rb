@@ -36,10 +36,9 @@ class UA_iOS_Migration
 
   # Execute the job
   def perform
-    arguments = options.split(",")
-    identifier = arguments.first
-    key = arguments.at(1)
-    master_secret = arguments.last
+    identifier = options.first
+    key = options.at(1)
+    master_secret = options.last
     
     if identifier.nil? || key.nil? || master_secret.nil?
       raise 'Invalid identifier, key or master_secret'
