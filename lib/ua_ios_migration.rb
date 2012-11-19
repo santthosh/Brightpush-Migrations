@@ -35,7 +35,7 @@ class UA_iOS_Migration
   end
 
   # Execute the job
-  def perform(args)
+  def perform
     arguments = args.split(",")
     identifier = arguments.first
     key = arguments.at(1)
