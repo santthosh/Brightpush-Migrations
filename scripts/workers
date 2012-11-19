@@ -4,11 +4,11 @@ function start {
 	mkdir -p ./tmp/pids
 	
 	echo "Starting the worker processes..."
-	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations0.pid QUEUE=migrations bundle exec rake resque:work > worker1.log &
+	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations0.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work > worker1.log
 	
-	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations1.pid QUEUE=migrations bundle exec rake resque:work > worker2.log & 
+	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations1.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work > worker2.log 
 	
-	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations2.pid QUEUE=migrations bundle exec rake resque:work > worker3.log &
+	RACK_ENV=$ENVIRONMENT PIDFILE=./tmp/pids/migrations2.pid BACKGROUND=yes QUEUE=migrations bundle exec rake resque:work > worker3.log
 	echo "Done"
 }
 
