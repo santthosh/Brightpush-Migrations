@@ -33,12 +33,17 @@ class UA_iOS_Migration
      	print "."
     end
   end
+  
+  def name
+    return "UA iOS Migraton"
+  end
 
   # Execute the job
   def perform
-    identifier = options.first
-    key = options.at(1)
-    master_secret = options.last
+    arguments = options.split(",")
+    identifier = arguments.first
+    key = arguments.at(1)
+    master_secret = arguments.last
     
     if identifier.nil? || key.nil? || master_secret.nil?
       raise 'Invalid identifier, key or master_secret'
