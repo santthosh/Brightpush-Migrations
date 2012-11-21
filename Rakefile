@@ -28,6 +28,7 @@ namespace :resque do
     # Setup the shared redis server
     Resque.redis = $redis
     Resque.redis.namespace = "resque"
+    Resque.Logger = Logger.new("migrations.log")
   end
 end
 
