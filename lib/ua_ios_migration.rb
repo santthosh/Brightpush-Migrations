@@ -29,8 +29,6 @@ class UA_iOS_Migration
      	end
      	
      	$migrated_device_count = $migrated_device_count + 1
-     	
-     	print "."
     end
   end
   
@@ -51,7 +49,7 @@ class UA_iOS_Migration
     
     tick()
     
-    puts("Starting migrations job for #{identifier}");
+    Resque.logger.info("Starting migrations job for #{identifier}");
     
     # Get the domain, if its not found create one
     domain = SimpleDB.get_domain(identifier)
@@ -66,16 +64,16 @@ class UA_iOS_Migration
       # Get UA device_token list and process them one page at a time
       until device_tokens_count > 0 && $migrated_device_count >= device_tokens_count  do
         tick()
-        puts "#{url}"
+        Resque.logger.info("#{url}")
         response = UA_API.get_next_page(url,key,master_secret)
         if response.nil?
           unless retry_count > 10
-            puts "ERROR: Expected a valid response, but none was returned, retrying.."
+            Resque.logger.info("ERROR: Expected a valid response, but none was returned, retrying..")
             retry_count = retry_count + 1
             tick()
             next
           else
-            puts "ERROR: 10 attempts failed, giving up.."
+            Resque.logger.info("ERROR: 10 attempts failed, giving up..")
             tick()
             break
           end
@@ -94,7 +92,7 @@ class UA_iOS_Migration
       end
       migrated_count = $migrated_device_count
       at($migrated_device_count,device_tokens_count,"Finished")
-      puts  "finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#{migrated_count}"
+      Resque.logger.info("Finished migrations. total:#{device_tokens_count} active:#{active_device_tokens_count} migrated:#{migrated_count}")
     end
   end
   

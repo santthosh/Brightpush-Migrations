@@ -1,4 +1,5 @@
 require 'resque/tasks'
+require 'resque/logging'
 require 'sinatra'
 import 'lib/simpledb.rb'
 import 'lib/ua_android_migration.rb'
@@ -28,7 +29,8 @@ namespace :resque do
     # Setup the shared redis server
     Resque.redis = $redis
     Resque.redis.namespace = "resque"
-    Resque.Logger = Logger.new("migrations.log")
+    Resque.logger = Logger.new("log/migrations.log",'daily')
+    Resque.logger.level = Logger::INFO
   end
 end
 

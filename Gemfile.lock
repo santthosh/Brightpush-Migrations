@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: git://github.com/santthosh-aim/resque.git
-  revision: 9b564a1b5cf9a4bd031c81001bab080e1ef395b7
+  revision: 3d2756b7350a4e10a70c91594757d1528061fc43
   branch: 2.0+logging
   specs:
-    resque (1.20.1)
+    resque (1.25.1)
       json
       redis-namespace (~> 1.0)
       sinatra (>= 0.9.2)
