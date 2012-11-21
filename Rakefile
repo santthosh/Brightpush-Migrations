@@ -1,5 +1,4 @@
 require 'resque/tasks'
-require 'resque/logging'
 require 'sinatra'
 import 'lib/simpledb.rb'
 import 'lib/ua_android_migration.rb'
